@@ -430,6 +430,8 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>displaymode</key>
+				<integer>0</integer>
 				<key>stackview</key>
 				<false/>
 			</dict>
@@ -511,6 +513,33 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>adduuid</key>
+				<true/>
+				<key>allowemptyfiles</key>
+				<true/>
+				<key>createintermediatefolders</key>
+				<true/>
+				<key>filename</key>
+				<string>/tmp/{const:alfred_workflow_bundleid}/manual.{var:format}</string>
+				<key>filetext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>relativepathmode</key>
+				<integer>0</integer>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.writefile</string>
+			<key>uid</key>
+			<string>FADD8B56-CD2D-413B-9832-B8CBEEC9D8EC</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
@@ -540,7 +569,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>/usr/bin/mandoc -T "${format}" "$(/usr/bin/man -S "${section_number}" -w "${1}")"</string>
+				<string>/usr/bin/mandoc -T "${format}" "${1}"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -637,6 +666,8 @@
 				<integer>0</integer>
 				<key>fontmode</key>
 				<integer>0</integer>
+				<key>fontsizing</key>
+				<integer>0</integer>
 				<key>footertext</key>
 				<string></string>
 				<key>inputfile</key>
@@ -648,6 +679,8 @@
 				<key>outputmode</key>
 				<integer>0</integer>
 				<key>scriptinput</key>
+				<integer>0</integer>
+				<key>spellchecking</key>
 				<integer>0</integer>
 				<key>stackview</key>
 				<false/>
@@ -671,33 +704,6 @@
 			<string>alfred.workflow.trigger.external</string>
 			<key>uid</key>
 			<string>A7457A0B-05CC-48A8-89A9-A34E4D735887</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>adduuid</key>
-				<true/>
-				<key>allowemptyfiles</key>
-				<true/>
-				<key>createintermediatefolders</key>
-				<true/>
-				<key>filename</key>
-				<string>/tmp/{const:alfred_workflow_bundleid}/manual.{var:format}</string>
-				<key>filetext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>relativepathmode</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>1</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.writefile</string>
-			<key>uid</key>
-			<string>FADD8B56-CD2D-413B-9832-B8CBEEC9D8EC</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -914,12 +920,12 @@ function envVar(varName) {
     .objectForKey(varName).js
 }
 
-function manuals(sections) {
+function runCommand(...arguments) {
   const task = $.NSTask.alloc.init
   const stdout = $.NSPipe.pipe
 
-  task.executableURL = $.NSURL.fileURLWithPath("/usr/bin/man")
-  task.arguments = ["-S", sections.join(":"), "-k", "."]
+  task.executableURL = $.NSURL.fileURLWithPath("/usr/bin/env")
+  task.arguments = arguments
   task.standardOutput = stdout
   task.launchAndReturnError(false)
 
@@ -927,6 +933,19 @@ function manuals(sections) {
   const stringOut = $.NSString.alloc.initWithDataEncoding(dataOut, $.NSUTF8StringEncoding).js
 
   return stringOut
+}
+
+function dirContents(path) {
+  const arguments = [
+    $.NSURL.fileURLWithPath(path),
+    undefined,
+    $.NSDirectoryEnumerationSkipsHiddenFiles,
+    undefined
+  ]
+
+  return $.NSFileManager.defaultManager
+    .contentsOfDirectoryAtURLIncludingPropertiesForKeysOptionsError(...arguments)
+    .js.map(p =&gt; p.path.js)
 }
 
 // Main
@@ -951,21 +970,19 @@ function run() {
   }]})
 
   // Grab manuals
-  const allManuals = manuals(chosenSections).slice(0, -1).split("\n")
-  const uniqueManuals = [...new Set(allManuals)] // Remove duplicate entries
+  const manualFiles = runCommand("/usr/bin/manpath")
+    .trim().split(":")
+    .flatMap(dir =&gt; dirContents(dir))
+    .filter(dir =&gt; chosenSections.includes(dir.slice(-1)))
+    .flatMap(dir =&gt; dirContents(dir))
+    .filter(file =&gt; file.match(/\.\d$/))
 
-  const sfItems = uniqueManuals.map(manLine =&gt; {
-    const manName = manLine.match(/.*\(\d\)\s+- /)[0].replace(/\s+- $/, '')
-    const manDesc = manLine.match(/\(\d\)\s+- .*/)[0].replace(/^\(\d\)\s+- /, '')
-    const mainMan = manName.split(/\(\d\)/)[0]
-    const section = manName.match(/\(\d\)/)[0].match(/\d/)[0]
-
+  const sfItems = manualFiles.map(manFile =&gt; {
     return {
-      variables: { section_number: section },
-      uid: manName,
-      title: manName,
-      subtitle: manDesc,
-      arg: mainMan
+      uid: manFile,
+      title: $(manFile).lastPathComponent.js.slice(0, -2),
+      subtitle: manFile,
+      arg: manFile
     }
   })
 
