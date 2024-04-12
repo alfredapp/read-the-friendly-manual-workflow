@@ -513,33 +513,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>adduuid</key>
-				<true/>
-				<key>allowemptyfiles</key>
-				<true/>
-				<key>createintermediatefolders</key>
-				<true/>
-				<key>filename</key>
-				<string>/tmp/{const:alfred_workflow_bundleid}/manual.{var:format}</string>
-				<key>filetext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>relativepathmode</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>1</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.writefile</string>
-			<key>uid</key>
-			<string>FADD8B56-CD2D-413B-9832-B8CBEEC9D8EC</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
@@ -704,6 +677,33 @@
 			<string>alfred.workflow.trigger.external</string>
 			<key>uid</key>
 			<string>A7457A0B-05CC-48A8-89A9-A34E4D735887</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>adduuid</key>
+				<true/>
+				<key>allowemptyfiles</key>
+				<true/>
+				<key>createintermediatefolders</key>
+				<true/>
+				<key>filename</key>
+				<string>/tmp/{const:alfred_workflow_bundleid}/manual.{var:format}</string>
+				<key>filetext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>relativepathmode</key>
+				<integer>0</integer>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.writefile</string>
+			<key>uid</key>
+			<string>FADD8B56-CD2D-413B-9832-B8CBEEC9D8EC</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -1060,7 +1060,7 @@ function run() {
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>/usr/bin/man -S {var:section_number} {query}</string>
+				<string>/usr/bin/man {query}</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.terminalcommand</string>
