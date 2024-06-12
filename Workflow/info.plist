@@ -945,7 +945,7 @@ function dirContents(path) {
 
   return $.NSFileManager.defaultManager
     .contentsOfDirectoryAtURLIncludingPropertiesForKeysOptionsError(...arguments)
-    .js.map(p =&gt; p.path.js)
+    .js?.map(p =&gt; p.path.js) || []
 }
 
 // Main
