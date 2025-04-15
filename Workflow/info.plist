@@ -519,7 +519,7 @@
 				<integer>102</integer>
 				<key>script</key>
 				<string># See "ASCII Output" section of "mandoc" manual page
-/usr/bin/col -b &lt;&lt;&lt; "${1}"</string>
+/usr/bin/col -bx &lt;&lt;&lt; "${1}"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
