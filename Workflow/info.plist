@@ -1114,7 +1114,7 @@ function run() {
 
 Search installed manual pages via the `man` keyword.
 
-![Searchign for manual pages](images/about/search.png)
+![Searching for manual pages](images/about/search.png)
 
 * &lt;kbd&gt;↩&lt;/kbd&gt; Open in primary viewer.
 * &lt;kbd&gt;⌥&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Open in secondary viewer.
@@ -1578,8 +1578,6 @@ When viewing in Alfred, &lt;kbd&gt;⌥&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; ope
 			<string>sec9</string>
 		</dict>
 	</array>
-	<key>variablesdontexport</key>
-	<array/>
 	<key>version</key>
 	<string>2025.1</string>
 	<key>webaddress</key>
