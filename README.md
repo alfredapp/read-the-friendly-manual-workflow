@@ -8,10 +8,10 @@ Open Unix Manual Pages
 
 Search installed manual pages via the `man` keyword.
 
-![Searchign for manual pages](Workflow/images/about/search.png)
+![Searching for manual pages](Workflow/images/about/search.png)
 
-* <kbd>↩&#xFE0E;</kbd> Open in primary viewer.
-* <kbd>⌥</kbd><kbd>↩&#xFE0E;</kbd> Open in secondary viewer.
+* <kbd>↩</kbd> Open in primary viewer.
+* <kbd>⌥</kbd><kbd>↩</kbd> Open in secondary viewer.
 
 The viewer app set in the [Workflow’s Configuration](https://www.alfredapp.com/help/workflows/user-configuration/) determines the generated format:
 
@@ -22,7 +22,7 @@ The viewer app set in the [Workflow’s Configuration](https://www.alfredapp.com
 * Web Browser: HTML.
 * Terminal: Standard view.
 
-When viewing in Alfred, <kbd>⌥</kbd><kbd>↩&#xFE0E;</kbd> opens the alternative viewer.
+When viewing in Alfred, <kbd>⌥</kbd><kbd>↩</kbd> opens the alternative viewer.
 
 ![Text View in Alfred](Workflow/images/about/text.png)
 
